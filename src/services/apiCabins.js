@@ -1,7 +1,7 @@
-import supabase, {supabaseUrl} from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function getCabins() {
-  const {data, error} = await supabase.from("cabins").select("*");
+  const { data, error } = await supabase.from("cabins").select("*");
 
   if (error) {
     console.error(error);
@@ -21,9 +21,9 @@ export async function createCabin(newCabin) {
   //https://bkhobwrsvhfjguvtevcl.supabase.co/storage/v1/object/public/cabin-images/cabin-002.jpg
 
   // 1. Create cabin
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from("cabins")
-    .insert([{...newCabin, image: imagePath}])
+    .insert([{ ...newCabin, image: imagePath }])
     .select()
     .single();
 
@@ -34,7 +34,7 @@ export async function createCabin(newCabin) {
 
   // 2. Upload image
 
-  const {error: storageError} = await supabase.storage
+  const { error: storageError } = await supabase.storage
     .from("cabin-images")
     .upload(imageNmae, newCabin.image);
 
@@ -68,12 +68,12 @@ export async function createEditCabin(newCabin, id) {
   let query = supabase.from("cabins");
 
   // A) CREATE
-  if (!id) query = query.insert([{...newCabin, image: imagePath}]);
+  if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
 
   // B) EDIT
-  if (id) query = query.update({...newCabin, image: imagePath}).eq("id", id);
+  if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
 
-  const {data, error} = await query.select().single();
+  const { data, error } = await query.select().single();
 
   if (error) {
     console.error(error);
@@ -83,7 +83,7 @@ export async function createEditCabin(newCabin, id) {
   // 2. Upload image
   if (hasImagePath) return data;
 
-  const {error: storageError} = await supabase.storage
+  const { error: storageError } = await supabase.storage
     .from("cabin-images")
     .upload(imageNmae, newCabin.image);
 
@@ -100,7 +100,7 @@ export async function createEditCabin(newCabin, id) {
 }
 
 export async function deleteCabins(id) {
-  const {data, error} = await supabase.from("cabins").delete().eq("id", id);
+  const { data, error } = await supabase.from("cabins").delete().eq("id", id);
 
   if (error) {
     console.error(error);
